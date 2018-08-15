@@ -21,3 +21,8 @@ pca$scores[1:5,] #shows how components score values in each question
 biplot(pca) #draws a visual presentation of sorts to 2-D
 fa4$loadings #show only the loadings table
 fa4$uniquenesses #show how much uniqueness there was in the answers based on each question
+
+#Corrplot visualisation
+install.packages("corrplot") #install pacgage to do more visualisations
+library(corrplot) #import corrplot
+corrplot(cm, order="AOE", method="color") #visualise correlation matrix with the corrplot
