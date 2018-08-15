@@ -1,0 +1,150 @@
+> qa = read.csv("questionnaire_coded.csv") #read csv file
+> cm <- cor(qa) #calculate correlation matrix from questionnaire answers
+> pca <- princomp(cm, scores=TRUE, cor=TRUE) #principal component analysis from correlation matrix
+> summary(pca) #show "Importance of components", eigenvalue on top, standard deviation, cumulative explanative power
+Importance of components:
+                         Comp.1    Comp.2    Comp.3    Comp.4     Comp.5     Comp.6     Comp.7     Comp.8     Comp.9
+Standard deviation     1.829241 1.6774050 1.4449248 1.4302268 1.01287591 0.91222928 0.64922027 0.43586235 0.39762490
+Proportion of Variance 0.257394 0.2164375 0.1606006 0.1573499 0.07891674 0.06401248 0.03242207 0.01461354 0.01216197
+Cumulative Proportion  0.257394 0.4738315 0.6344321 0.7917820 0.87069873 0.93471121 0.96713329 0.98174683 0.99390879
+                           Comp.10     Comp.11      Comp.12      Comp.13
+Standard deviation     0.208919589 0.164143384 0.0927106053 1.752160e-08
+Proportion of Variance 0.003357492 0.002072542 0.0006611736 2.361587e-17
+Cumulative Proportion  0.997266284 0.999338826 1.0000000000 1.000000e+00
+> screeplot(pca, type="line", main="ScreePlot") #draws a graph to help deciding the number of factors
+> ve <- cbind(qa) #make vectors out of each line of answers in the table
+> fa2 <- factanal(ve, factor=2, rotation="varimax", scores="regression") #run analysis with 2 factors
+> fa2 #show the results
+
+Call:
+factanal(x = ve, factors = 2, scores = "regression", rotation = "varimax")
+
+Uniquenesses:
+   ag    es    wa    pr    fi    re    fd    pe    cp    pp    wr    ee    he 
+0.005 0.943 0.506 0.943 0.972 0.980 0.467 0.005 0.948 0.927 0.937 0.857 0.949 
+
+Loadings:
+   Factor1 Factor2
+ag -0.109   0.991 
+es  0.115  -0.210 
+wa  0.471  -0.522 
+pr         -0.234 
+fi -0.166         
+re  0.141         
+fd  0.724         
+pe  0.996         
+cp          0.225 
+pp         -0.264 
+wr  0.250         
+ee  0.372         
+he  0.181   0.135 
+
+               Factor1 Factor2
+SS loadings      2.051   1.510
+Proportion Var   0.158   0.116
+Cumulative Var   0.158   0.274
+
+Test of the hypothesis that 2 factors are sufficient.
+The chi square statistic is 81.01 on 53 degrees of freedom.
+The p-value is 0.00792 
+> fa4 <- factanal(ve, factor=4, rotation="varimax", scores="regression") #with 4 factors
+> fa4
+
+Call:
+factanal(x = ve, factors = 4, scores = "regression", rotation = "varimax")
+
+Uniquenesses:
+   ag    es    wa    pr    fi    re    fd    pe    cp    pp    wr    ee    he 
+0.005 0.697 0.499 0.005 0.968 0.756 0.417 0.005 0.638 0.840 0.005 0.755 0.862 
+
+Loadings:
+   Factor1 Factor2 Factor3 Factor4
+ag         -0.981   0.128   0.111 
+es  0.159   0.163          -0.500 
+wa  0.436   0.545  -0.106         
+pr -0.112   0.352   0.924         
+fi -0.172                         
+re                          0.482 
+fd  0.695                   0.311 
+pe  0.989                   0.114 
+cp         -0.137   0.576   0.105 
+pp -0.103   0.306   0.210   0.106 
+wr  0.124   0.158   0.314   0.925 
+ee  0.373   0.101   0.266  -0.158 
+he  0.168           0.319         
+
+               Factor1 Factor2 Factor3 Factor4
+SS loadings      1.925   1.568   1.536   1.518
+Proportion Var   0.148   0.121   0.118   0.117
+Cumulative Var   0.148   0.269   0.387   0.504
+
+Test of the hypothesis that 4 factors are sufficient.
+The chi square statistic is 44.53 on 32 degrees of freedom.
+The p-value is 0.0695 
+> cor(qa$ag, qa$fi) #calculate correlation between two questions. Results in [1] 0.02818612
+[1] 0.02818612
+> plot(pca) #draws basic graphs for any purpose, eigenvalues for this
+> loadings(pca) #shows how components are different from each other. A way to think of what they could mean
+
+Loadings:
+   Comp.1 Comp.2 Comp.3 Comp.4 Comp.5 Comp.6 Comp.7 Comp.8 Comp.9 Comp.10 Comp.11 Comp.12 Comp.13
+ag         0.489  0.200 -0.170 -0.389 -0.167                       0.266  -0.133  -0.219   0.607 
+es  0.307        -0.371 -0.302  0.411               -0.355        -0.221   0.221  -0.325   0.414 
+wa -0.257 -0.437 -0.151         0.154  0.352         0.514 -0.112  0.148  -0.112           0.492 
+pr  0.101        -0.275  0.580  0.197 -0.212  0.150 -0.330         0.299  -0.494           0.133 
+fi  0.384 -0.195  0.360                      -0.241        -0.778                                
+re -0.228         0.497         0.414         0.496 -0.148         0.411   0.280                 
+fd -0.437 -0.114 -0.109 -0.255        -0.236 -0.429 -0.441         0.183   0.137   0.459   0.111 
+pe -0.373 -0.205 -0.249 -0.335        -0.214               -0.154  0.178  -0.289  -0.596  -0.301 
+cp         0.416 -0.316  0.227  0.288 -0.215 -0.223  0.368 -0.183  0.259   0.472          -0.153 
+pp  0.104 -0.408  0.135  0.383 -0.269        -0.360 -0.168  0.320  0.217   0.324  -0.414         
+wr -0.372         0.272  0.283  0.185 -0.440                      -0.627          -0.166   0.210 
+ee  0.201 -0.333 -0.239        -0.347 -0.495  0.474  0.162 -0.118          0.311   0.211   0.138 
+he -0.326  0.143 -0.152  0.278 -0.357  0.457  0.251 -0.293 -0.429 -0.142   0.264  -0.110         
+
+               Comp.1 Comp.2 Comp.3 Comp.4 Comp.5 Comp.6 Comp.7 Comp.8 Comp.9 Comp.10 Comp.11 Comp.12 Comp.13
+SS loadings     1.000  1.000  1.000  1.000  1.000  1.000  1.000  1.000  1.000   1.000   1.000   1.000   1.000
+Proportion Var  0.077  0.077  0.077  0.077  0.077  0.077  0.077  0.077  0.077   0.077   0.077   0.077   0.077
+Cumulative Var  0.077  0.154  0.231  0.308  0.385  0.462  0.538  0.615  0.692   0.769   0.846   0.923   1.000
+> pca$scores[1:5,] #shows how components score values in each question
+       Comp.1     Comp.2     Comp.3      Comp.4     Comp.5      Comp.6      Comp.7      Comp.8      Comp.9       Comp.10
+ag  0.8092341  3.5937884  1.3279601 -1.32685086 -1.5589604  0.05022878 -0.13268343  0.28808389  0.40687879  0.0274312349
+es  2.7877860  0.2639024 -1.7227866 -1.96087928  1.3998746  0.71061421 -0.01056968 -0.41054114  0.37099578 -0.2930654024
+wa -1.2463185 -2.2665372 -0.5935553  0.08092829  0.4535885  1.54462124 -0.23127538  0.90779884  0.12562586  0.0009921263
+pr  1.0274313  0.4144698 -1.3052487  2.76569882  0.6243645 -0.49025844  0.36088989 -0.46209868 -0.01348897  0.1961657631
+fi  3.0031753 -0.8521524  2.0359817 -0.49398361  0.1551254  0.12309568 -0.55419900  0.02379821 -0.97928312  0.0305397941
+       Comp.11     Comp.12       Comp.13
+ag -0.20095052  0.02858974 -1.379539e-15
+es  0.02162173 -0.02800914  9.089951e-16
+wa -0.15194436  0.09495104  6.048981e-15
+pr -0.32345976  0.04148523  7.927686e-16
+fi -0.04121095 -0.01261660 -4.579670e-16
+> biplot(pca) #draws a visual presentation of sorts to 2-D
+> fa4$loadings #show only the loadings table
+
+Loadings:
+   Factor1 Factor2 Factor3 Factor4
+ag         -0.981   0.128   0.111 
+es  0.159   0.163          -0.500 
+wa  0.436   0.545  -0.106         
+pr -0.112   0.352   0.924         
+fi -0.172                         
+re                          0.482 
+fd  0.695                   0.311 
+pe  0.989                   0.114 
+cp         -0.137   0.576   0.105 
+pp -0.103   0.306   0.210   0.106 
+wr  0.124   0.158   0.314   0.925 
+ee  0.373   0.101   0.266  -0.158 
+he  0.168           0.319         
+
+               Factor1 Factor2 Factor3 Factor4
+SS loadings      1.925   1.568   1.536   1.518
+Proportion Var   0.148   0.121   0.118   0.117
+Cumulative Var   0.148   0.269   0.387   0.504
+> fa4$uniquenesses #show how much uniqueness there was in the answers based on each question
+       ag        es        wa        pr        fi        re        fd        pe        cp        pp        wr        ee 
+0.0050000 0.6972496 0.4989637 0.0050000 0.9684062 0.7560494 0.4172744 0.0050000 0.6380847 0.8401685 0.0050000 0.7546526 
+       he 
+0.8619957 
+> 
